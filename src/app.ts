@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import httpStatus from 'http-status'
-import { clear } from 'console'
+import itensRouter from './routers/itens-router'
 
 const PORT = process.env.PORT || 4000
 const HOSTNAME = process.env.HOSTNAME || 'http://localhost'
@@ -14,6 +14,8 @@ app.get('/', (req, res) => {
 app.use(cors({
     origin: ['http://localhost:3000']
 }))
+
+app.use('/api', itensRouter)
 
 app.use((req, res) => {
     res.status(httpStatus.NOT_FOUND)
