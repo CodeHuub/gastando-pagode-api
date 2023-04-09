@@ -1,5 +1,5 @@
 import express from 'express'
-import Item from '../models/item'
+import Item from '@models/item'
 
 const itensRouter = express.Router()
 
@@ -10,7 +10,7 @@ itensRouter.get('/itens', (req, res) => {
     const itens: Item[] = [
         {
             id: 1,
-            name: 'Emanuel',
+            name: 'Emanuel Furlan',
             description: 'Lindo!'
         },
         {
