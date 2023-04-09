@@ -1,7 +1,8 @@
+import 'module-alias/register'
 import express from 'express'
 import cors from 'cors'
 import httpStatus from 'http-status'
-import itensRouter from './routers/itens-router'
+import itensRouter from '@routers/itens-router'
 
 const PORT = process.env.PORT || 4000
 const HOSTNAME = process.env.HOSTNAME || 'http://localhost'
