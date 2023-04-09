@@ -27,7 +27,7 @@
         "module-alias": "^2.2.2"
     },
     "_moduleAliases": {
-        "@models": "dist/models",
-        "@routers": "dist/routers"
+        "@models": "src/models",
+        "@routers": "src/routers"
     }
 }
