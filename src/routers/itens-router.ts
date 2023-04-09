@@ -10,7 +10,7 @@ itensRouter.get('/itens', (req, res) => {
     const itens: Item[] = [
         {
             id: 1,
-            name: 'Emanuel',
+            name: 'Emanuel Furlan',
             description: 'Lindo!'
         },
         {
