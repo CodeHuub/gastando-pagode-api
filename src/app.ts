@@ -1,4 +1,6 @@
 import 'module-alias/register'
+import * as dotenv from 'dotenv'
+dotenv.config()
 import express from 'express'
 import cors from 'cors'
 import httpStatus from 'http-status'
