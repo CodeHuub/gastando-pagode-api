@@ -1,4 +1,4 @@
-import { User } from "@models"
+import User from "@models/User"
 const isDev = process.env.NODE_ENV === 'development'
 
 const dbInit = () => {

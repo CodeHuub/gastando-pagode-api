@@ -21,7 +21,7 @@ class User extends Model<IUserAttributes, IUserInput> implements IUserAttributes
     public password!: string;
     public readonly createdAt!: Date;
     public readonly updateAt!: Date;
-    public readonly deletedAt!: Date;
+    public readonly deleteAt!: Date;
 }
 
 User.init({
