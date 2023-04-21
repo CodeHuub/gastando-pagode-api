@@ -7,6 +7,10 @@
     "license": "MIT",
     "private": false,
     "devDependencies": {
+        "@types/express-session": "^1.17.7",
+        "@types/passport": "^1.0.12",
+        "@types/passport-google-oauth2": "^0.1.5",
+        "@types/passport-local": "^1.0.35",
         "nodemon": "^2.0.21",
         "ts-node": "^10.9.1",
         "typescript": "^5.0.2"
@@ -23,8 +27,12 @@
         "@types/node": "^18.15.3",
         "cors": "^2.8.5",
         "express": "^4.18.2",
+        "express-session": "^1.17.3",
         "http-status": "^1.6.2",
-        "module-alias": "^2.2.2"
+        "module-alias": "^2.2.2",
+        "passport": "^0.6.0",
+        "passport-google-oauth2": "^0.2.0",
+        "passport-local": "^1.0.0"
     },
     "_moduleAliases": {
         "@models": "src/models",
