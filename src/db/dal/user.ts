@@ -8,8 +8,8 @@ export const create = async (payload: IUserInput): Promise<IUserOutput> => {
     return user
 }
 
-export const update = async (tenantID: string, payload: Partial<IUserInput>): Promise<IUserOutput> => {
-    const user = await User.findByPk(tenantID)
+export const update = async (tenantId: string, payload: Partial<IUserInput>): Promise<IUserOutput> => {
+    const user = await User.findByPk(tenantId)
     if (!user) {
         throw new Error('not found!')
     }

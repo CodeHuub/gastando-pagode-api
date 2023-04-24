@@ -33,11 +33,20 @@
       "@models/*": [
         "db/models/*"
       ],
-      "@routers/*": [
-        "routers/*"
-      ],
       "@dal/*": [
         "db/dal/*"
+      ],
+      "@api/*": [
+        "api/*"
+      ],
+      "@routers/*": [
+        "api/routers/*"
+      ],
+      "@services/*": [
+        "api/services/*"
+      ],
+      "@controllers/*": [
+        "api/controllers/*"
       ]
     }, /* Specify a set of entries that re-map imports to additional lookup locations. */
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
