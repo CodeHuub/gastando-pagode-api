@@ -18,12 +18,8 @@ export const update = async (tenantId: string, payload: Partial<IUserInput>): Pr
     return updatedUser
 }
 
-export const getById = async (tenantId: string): Promise<IUserOutput> => {
-    const user = await User.findByPk(tenantId)
-    if (!user) {
-        throw new Error('not found')
-    }
-    return user
+export const getById = async (tenantId: string): Promise<IUserOutput | null> => {
+    return await User.findByPk(tenantId)
 }
 
 export const deleteById = async (tenantId: string): Promise<boolean> => {
