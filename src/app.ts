@@ -1,17 +1,22 @@
 import 'module-alias/register'
-import express from 'express'
+import * as dotenv from 'dotenv'
+dotenv.config()
+import express, { Application, Request, Response } from 'express'
 import cors from 'cors'
 import httpStatus from 'http-status'
-import itensRouter from '@routers/itens-router'
+import router from '@routers/router'
+import dbInit from '@db/init'
+
+dbInit()
 
 const PORT = process.env.PORT || 4000
 const HOSTNAME = process.env.HOSTNAME || 'http://localhost'
-const app = express()
+const app: Application = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
     res.send('Bem-vindo! João.')
 })
 
@@ -19,9 +24,9 @@ app.use(cors({
     origin: ['http://localhost:3000']
 }))
 
-app.use('/api', itensRouter)
+app.use('/api/v1', router)
 
-app.use((req, res) => {
+app.use((req: Request, res: Response) => {
     res.status(httpStatus.NOT_FOUND)
 })
 
