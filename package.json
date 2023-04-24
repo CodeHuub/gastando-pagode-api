@@ -30,8 +30,9 @@
         "sequelize": "^6.31.0"
     },
     "_moduleAliases": {
-        "@models": "src/models",
-        "@routers": "src/routers",
-        "@db": "src/db"
+        "@db": "src/db",
+        "@dal": "src/db/dal",
+        "@models": "src/db/models",
+        "@routers": "src/routers"
     }
 }

@@ -1,6 +1,6 @@
 import { Op } from 'sequelize'
 import User from '@models/User'
-import { GetAllUserFilters } from '@db/dal/types'
+import { GetAllUserFilters } from '@dal/types'
 import { IUserInput, IUserOutput } from '@models/User'
 
 export const create = async (payload: IUserInput): Promise<IUserOutput> => {
