@@ -4,7 +4,7 @@ import { CreateUserDTO, FilterUserDTO, UpdateUserDTO } from '@controllers/user/d
 import { OK, FORBIDDEN } from 'http-status'
 
 const userRouter = Router()
-userRouter.get(':/tenantId', async (req: Request, res: Response) => {
+userRouter.get('/:tenantId', async (req: Request, res: Response) => {
     const tenantId = req.params.tenantId
     const result = await userController.getById(tenantId)
     return res.status(200).send(result)
@@ -14,6 +14,9 @@ userRouter.put('/:tenantId', async (req: Request, res: Response) => {
     const payload: UpdateUserDTO = req.body
 
     const result = await userController.update(tenantId, payload)
+    if (userController.isIUserError(result)) {
+        return res.status(FORBIDDEN).send(result.errorMessage)
+    }
     return res.status(201).send(result)
 })
 userRouter.delete('/:tenantId', async (req: Request, res: Response) => {

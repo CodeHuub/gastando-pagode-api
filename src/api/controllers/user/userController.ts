@@ -2,17 +2,19 @@ import * as mapper from "./userMapper"
 import * as service from "@services/userServices"
 import { CreateUserDTO, FilterUserDTO, UpdateUserDTO } from "./dto/user.dto"
 import { IUser } from './interfaces/user.interface'
-import { EMAIL_EMPTY, IUserError, NAME_EMPTY, PASSWORD_EMPTY } from "./interfaces/userError.interface"
+import { EMAIL_EMPTY, EMAIL_INVALID, IUserError, NAME_EMPTY, PASSWORD_EMPTY, TENANT_ID_EMPTY, USER_NOT_FOUND } from "./interfaces/userError.interface"
 import { v4 as uuid } from "uuid"
 import bcrypt from 'bcrypt'
+import * as emailValidator from 'email-validator'
 
 export const create = async (payload: CreateUserDTO): Promise<IUser | IUserError> => {
-    if (!payload.name) {
-        return mapper.toUserError(NAME_EMPTY)
-    } else if (!payload.email) {
-        return mapper.toUserError(EMAIL_EMPTY)
-    } else if (!payload.password) {
-        return mapper.toUserError(PASSWORD_EMPTY)
+
+    // TODO - Verificar se o e-mail existe
+    // TODO - Criptografar a senha
+
+    const userValidation = validateUser(payload)
+    if (userValidation) {
+        return userValidation;
     }
 
     payload.tenantId = uuid();
@@ -20,13 +22,36 @@ export const create = async (payload: CreateUserDTO): Promise<IUser | IUserError
 
     return mapper.toUser(await service.create(payload))
 }
-export const update = async (tenantId: string, payload: UpdateUserDTO): Promise<IUser> => {
+export const update = async (tenantId: string, payload: UpdateUserDTO): Promise<IUser | IUserError> => {
+
+    // TODO - Verificar se o e-mail existe
+    // TODO - Criptografar a senha
+    // TODO - Verificar se não é a mesma senha
+
+
+    const userValidation = validateUser(payload)
+    if (userValidation) {
+        return userValidation;
+    }
     return mapper.toUser(await service.update(tenantId, payload))
 }
-export const getById = async (tenantId: string): Promise<IUser> => {
-    return mapper.toUser(await service.getById(tenantId))
+export const getById = async (tenantId: string): Promise<IUser | IUserError> => {
+
+    if (!tenantId) {
+        return mapper.toUserError(TENANT_ID_EMPTY)
+    }
+
+    const user = await service.getById(tenantId)
+    if (!user) {
+        return mapper.toUserError(USER_NOT_FOUND)
+    }
+    return mapper.toUser(user)
 }
-export const deleteById = async (tenantId: string): Promise<Boolean> => {
+export const deleteById = async (tenantId: string): Promise<Boolean | IUserError> => {
+
+    if (!tenantId) {
+        return mapper.toUserError(TENANT_ID_EMPTY)
+    }
     const isDeleted = await service.deleteById(tenantId)
     return isDeleted
 }
@@ -50,6 +75,19 @@ function validatePassword(password: string, hashPassword: string): Promise<boole
             return res
         })
         .catch(err => { return false })
+}
+
+function validateUser(payload: UpdateUserDTO): IUserError | null {
+    if (!payload.name) {
+        return mapper.toUserError(NAME_EMPTY)
+    } else if (!payload.email) {
+        return mapper.toUserError(EMAIL_EMPTY)
+    } else if (!payload.password) {
+        return mapper.toUserError(PASSWORD_EMPTY)
+    } else if (!emailValidator.validate(payload.email)) {
+        return mapper.toUserError(EMAIL_INVALID)
+    }
+    return null
 }
 
 export const isIUserError = (object: any): object is IUserError => {
