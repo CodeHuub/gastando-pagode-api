@@ -30,7 +30,7 @@ app.use((req: Request, res: Response) => {
     res.status(httpStatus.NOT_FOUND)
 })
 
-app.listen(PORT, () => {
+export const server = app.listen(PORT, () => {
     console.log(`🔥 Server running on ${HOSTNAME}:${PORT}`)
 })
 
