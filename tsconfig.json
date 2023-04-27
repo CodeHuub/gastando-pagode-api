@@ -27,17 +27,14 @@
     // "moduleResolution": "node10",                     /* Specify how TypeScript looks up a file from a given module specifier. */
     "baseUrl": "./src", /* Specify the base directory to resolve non-relative module names. */
     "paths": {
-      "@db/*": [
-        "db/*"
-      ],
       "@models/*": [
         "db/models/*"
       ],
       "@dal/*": [
         "db/dal/*"
       ],
-      "@api/*": [
-        "api/*"
+      "@db/*": [
+        "db/*"
       ],
       "@routes/*": [
         "api/routes/*"
@@ -47,6 +44,12 @@
       ],
       "@controllers/*": [
         "api/controllers/*"
+      ],
+      "@api/*": [
+        "api/*"
+      ],
+      "@root/*": [
+        "*"
       ]
     }, /* Specify a set of entries that re-map imports to additional lookup locations. */
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
@@ -127,7 +130,5 @@
     "."
   ],
   "exclude": [
-    "./dist",
-    "**/*.test.ts",
   ]
 }

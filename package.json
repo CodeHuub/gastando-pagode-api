@@ -43,12 +43,13 @@
         "sequelize": "^6.31.0"
     },
     "_moduleAliases": {
-        "@db": "src/db",
         "@dal": "src/db/dal",
         "@models": "src/db/models",
-        "@api": "src/api",
+        "@db": "src/db",
         "@routes": "src/api/routes",
         "@services": "src/api/services",
-        "@controllers": "src/api/controllers"
+        "@controllers": "src/api/controllers",
+        "@api": "src/api",
+        "@root": "src"
     }
 }
