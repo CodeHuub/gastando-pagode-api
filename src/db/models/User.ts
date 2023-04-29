@@ -1,4 +1,4 @@
-import { DataType, DataTypes, Model, Optional } from "sequelize"
+import { DataTypes, Model, Optional } from "sequelize"
 import sequelizeConnection from "@db/config"
 
 interface IUserAttributes {
@@ -19,6 +19,7 @@ class User extends Model<IUserAttributes, IUserInput> implements IUserAttributes
     public name!: string
     public email!: string;
     public password!: string;
+
     public readonly createdAt!: Date;
     public readonly updateAt!: Date;
     public readonly deleteAt!: Date;
@@ -43,7 +44,6 @@ User.init({
         allowNull: false
     }
 }, {
-    timestamps: true,
     sequelize: sequelizeConnection,
     paranoid: true
 })

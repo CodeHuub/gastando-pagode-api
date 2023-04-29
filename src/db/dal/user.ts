@@ -1,4 +1,5 @@
 import { Op } from 'sequelize'
+
 import User from '@models/User'
 import { GetAllUserFilters } from '@dal/types'
 import { IUserInput, IUserOutput } from '@models/User'

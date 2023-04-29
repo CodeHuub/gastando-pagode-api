@@ -1,6 +1,6 @@
-import { IUserOutput } from "@db/models/User";
 import { IUser } from "./interfaces/user.interface";
 import { IUserError } from "./interfaces/userError.interface";
+import { IUserOutput } from "@db/models/User";
 
 export const toUser = (user: IUserOutput): IUser => {
     return {

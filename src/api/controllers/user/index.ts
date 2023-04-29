@@ -1,11 +1,11 @@
-import * as mapper from "./userMapper"
-import * as service from "@services/userServices"
+import * as service from '@services/userServices'
 import { CreateUserDTO, FilterUserDTO, UpdateUserDTO } from "./dto/user.dto"
 import { IUser } from './interfaces/user.interface'
+import * as mapper from "./mapper"
+
 import { EMAIL_EMPTY, EMAIL_INVALID, IUserError, NAME_EMPTY, PASSWORD_EMPTY, TENANT_ID_EMPTY, USER_NOT_FOUND } from "./interfaces/userError.interface"
-import { v4 as uuid } from "uuid"
-import bcrypt from 'bcrypt'
 import * as emailValidator from 'email-validator'
+import bcrypt from 'bcrypt'
 
 export const create = async (payload: CreateUserDTO): Promise<IUser | IUserError> => {
 
@@ -17,7 +17,7 @@ export const create = async (payload: CreateUserDTO): Promise<IUser | IUserError
         return userValidation;
     }
 
-    payload.tenantId = uuid();
+    payload.tenantId = crypto.randomUUID();
     payload.password = await generatePassword(payload.password)
 
     return mapper.toUser(await service.create(payload))

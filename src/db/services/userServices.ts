@@ -1,6 +1,6 @@
-import { IUserInput, IUserOutput } from "@db/models/User"
 import * as userDal from '@dal/user'
-import { GetAllUserFilters } from "@db/dal/types"
+import { GetAllUserFilters } from '@dal/types'
+import { IUserInput, IUserOutput } from "@models/User"
 
 export const create = (payload: IUserInput): Promise<IUserOutput> => {
     return userDal.create(payload)
