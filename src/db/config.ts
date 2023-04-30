@@ -8,11 +8,9 @@ import { SequelizeHooks } from "sequelize/types/hooks";
 
 import localCache from "../lib/local-cache";
 
-const isTest = process.env.NODE_ENV === "test";
 
-const dbName = isTest
-  ? (process.env.TEST_DB_NAME as string)
-  : (process.env.DB_NAME as string);
+const dbName = process.env.DB_NAME as string
+
 const dbUser = process.env.DB_USER as string;
 const dbHost = process.env.DB_HOST;
 const dbDriver = process.env.DB_DRIVER as Dialect;

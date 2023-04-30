@@ -1,8 +1,6 @@
 import User, { IUserOutput } from "@models/User";
 import { request } from "../helpers";
-import userRoutes from "@routes/user.routes";
 import { FORBIDDEN, OK } from "http-status";
-import { Response } from "supertest";
 import { getServer } from "@root/app";
 
 const dbTeardown = async () => {
@@ -18,8 +16,8 @@ afterAll((done) => {
 });
 
 describe("User resources", () => {
-  const URL = "/api/v1/users";
 
+  const URL = "/api/v1/users";
   let tenantId: string;
   let user: IUserOutput;
 
@@ -34,7 +32,7 @@ describe("User resources", () => {
       User.create({
         tenantId: crypto.randomUUID(),
         name: "Emanuel",
-        email: "joao@gmail.com",
+        email: "emanuel@gmail.com",
         password: "password",
       }),
     ]);
@@ -46,6 +44,7 @@ describe("User resources", () => {
   });
 
   describe("Get all users", () => {
+
     it("should validate if the response is an array", async () => {
       const response = await request.get(URL).expect(OK);
 
@@ -66,9 +65,6 @@ describe("User resources", () => {
   });
 
   describe("Get User by TenantId", () => {
-    // Verificar se retorna o user do tenantId passado
-    // Se o tenant Id for invalido, retornar message usuario n existe
-    // Verificar se o retorno é do tipo User
 
     it("should validate the response is a valid User object", async () => {
       const response = await request.get(`${URL}/${tenantId}`).expect(OK);
@@ -93,15 +89,143 @@ describe("User resources", () => {
       expect(error).toEqual({ message: "User not found!" });
     });
   });
+
   describe("Update User", () => {
-    /*
-            - Atualizar dados do User
-            - Verificar se os dados passados estão corretos
-            - Mensagem de erro caso algum preenchimento inválido
-            - Deve retornar os dados atualizados ao User
-            - 
-        */
+
+    it("should validate invalid TenantId scenario", async () => {
+      const { body: user } = await request.get(`${URL}/${tenantId}`)
+      user.name = 'Diana'
+
+      const response = await request
+        .put(`${URL}/${tenantId}1`)
+        .send(user)
+        .expect(FORBIDDEN);
+
+      const error = response.body;
+
+      expect(error).toEqual({ errorMessage: "User not found!" });
+    });
+
+    it("should validate if the data was updated", async () => {
+      let { body: user } = await request.get(`${URL}/${tenantId}`)
+      user.email = 'emanuel@codehuub.com'
+      user.password = '2134'
+
+      const response = await request
+        .put(`${URL}/${tenantId}`)
+        .send(user)
+        .expect(OK)
+
+      delete user.password
+      const currentUser = response.body
+      expect(currentUser).toMatchObject(user)
+
+      const getUserResponse = await request.get(`${URL}/${tenantId}`)
+      user = getUserResponse.body
+      expect(user).toMatchObject(currentUser)
+    })
+
+    it("should validate empty Name scenario", async () => {
+      const { body: user } = await request.get(`${URL}/${tenantId}`)
+      user.name = ''
+
+      const response = await request
+        .put(`${URL}/${tenantId}`)
+        .send(user)
+        .expect(FORBIDDEN);
+
+      const error = response.body;
+
+      expect(error).toEqual({ errorMessage: "Name property is empty" });
+    });
+
+    it("should validate empty E-mail scenario", async () => {
+      const { body: user } = await request.get(`${URL}/${tenantId}`)
+      user.email = ''
+
+      const response = await request
+        .put(`${URL}/${tenantId}`)
+        .send(user)
+        .expect(FORBIDDEN);
+
+      const error = response.body;
+
+      expect(error).toEqual({ errorMessage: "E-mail property is empty" });
+    });
+
+    it("should validate invalid E-mail scenario", async () => {
+      const { body: user } = await request.get(`${URL}/${tenantId}`)
+      user.email = 'test'
+
+      const response = await request
+        .put(`${URL}/${tenantId}`)
+        .send(user)
+        .expect(FORBIDDEN);
+
+      const error = response.body;
+
+      expect(error).toEqual({ errorMessage: "E-mail is invalid, E.g test@test.com" });
+    });
+
+    it("should validate empty Password scenario", async () => {
+      const { body: user } = await request.get(`${URL}/${tenantId}`)
+      user.password = ''
+
+      const response = await request
+        .put(`${URL}/${tenantId}`)
+        .send(user)
+        .expect(FORBIDDEN);
+
+      const error = response.body;
+
+      expect(error).toEqual({ errorMessage: "Password property is empty" });
+    });
+
+    it("should validate invalid Password scenario", async () => {
+      const { body: user } = await request.get(`${URL}/${tenantId}`)
+      user.password = '123456🤡'
+
+      const response = await request
+        .put(`${URL}/${tenantId}`)
+        .send(user)
+        .expect(FORBIDDEN);
+
+      const error = response.body;
+
+      expect(error).toEqual({ errorMessage: "Password is invalid!" });
+    });
+
+    it("should validate if E-mail already exists scenario", async () => {
+      const { body: userList } = await request.get(`${URL}/`)
+      const user = userList[0]
+      user.email = userList[1].email
+
+      const response = await request
+        .put(`${URL}/${tenantId}`)
+        .send(user)
+        .expect(FORBIDDEN);
+
+      const error = response.body;
+
+      expect(error).toEqual({ errorMessage: "E-mail already exists!" });
+    });
+
+    it("should validate if Password is the same scenario", async () => {
+      const { body: user } = await request.get(`${URL}/${tenantId}`)
+      user.password = 'password'
+
+      const response = await request
+        .put(`${URL}/${tenantId}`)
+        .send(user)
+        .expect(FORBIDDEN);
+
+      const error = response.body;
+
+      expect(error).toEqual({ errorMessage: "Password is the same as the current one!" });
+    });
+
   });
+
   describe("Delete User", () => {
     /*
             - Deletar User
@@ -110,6 +234,7 @@ describe("User resources", () => {
             - 
         */
   });
+
   describe("Create User", () => {
     /*
             - Deve Criar um User

@@ -17,9 +17,9 @@ userRoutes.put('/:tenantId', async (req: Request, res: Response) => {
 
     const result = await userController.update(tenantId, payload)
     if (userController.isIUserError(result)) {
-        return res.status(FORBIDDEN).send(result.errorMessage)
+        return res.status(FORBIDDEN).send(result)
     }
-    return res.status(201).send(result)
+    return res.status(OK).send(result)
 })
 userRoutes.delete('/:tenantId', async (req: Request, res: Response) => {
     const tenantId = req.params.tenantId
@@ -34,7 +34,7 @@ userRoutes.post('/', async (req: Request, res: Response) => {
     const result = await userController.create(payload)
 
     if (userController.isIUserError(result)) {
-        return res.status(FORBIDDEN).send(result.errorMessage)
+        return res.status(FORBIDDEN).send(result)
     }
     return res.status(OK).send(result)
 })

@@ -1,4 +1,6 @@
 import 'module-alias/register'
+import { config } from "dotenv";
+config({ path: `.env.${process.env.NODE_ENV}` });
 import express, { Application, NextFunction, Request, Response } from 'express'
 import cors from 'cors'
 import routes from '@routes/routes'
@@ -9,7 +11,7 @@ dbInit()
 
 let server: Server;
 
-export const get = () => {
+export const getApplication = () => {
     const app: Application = express()
 
     // Body parsing Middleware
@@ -37,7 +39,7 @@ export const get = () => {
 }
 
 export const start = () => {
-    const app = get()
+    const app = getApplication()
 
     const PORT = process.env.PORT || 4000
     const HOSTNAME = process.env.HOSTNAME || 'http://localhost'
@@ -56,7 +58,6 @@ export const start = () => {
         console.log(`Error occurred: ${error.message}`)
     }
 }
-
 
 export const getServer = () => {
     return server;
