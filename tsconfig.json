@@ -45,6 +45,9 @@
       "@controllers/*": [
         "api/controllers/*"
       ],
+      "@utils/*": [
+        "utils/*"
+      ],
       "@api/*": [
         "api/*"
       ],

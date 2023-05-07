@@ -18,6 +18,7 @@ const config: Config.InitialOptions = {
     "@db/(.*)": "<rootDir>/src/db/$1",
     "@routes/(.*)": "<rootDir>/src/api/routes/$1",
     "@controllers/(.*)": "<rootDir>/src/api/controllers/$1",
+    "@utils/(.*)": "<rootDir>/src/utils/$1",
     "@api/(.*)": "<rootDir>/src/api/$1",
     "@root/(.*)": "<rootDir>/src/$1"
   }

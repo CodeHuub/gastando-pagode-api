@@ -83,7 +83,7 @@ describe("User resources", () => {
         .expect(NOT_FOUND);
       const error = response.body;
 
-      expect(error).toEqual({ message: "User not found!" });
+      expect(error).toEqual({ errorMessage: "User not found." });
     });
   });
 
@@ -99,7 +99,7 @@ describe("User resources", () => {
 
       const error = response.body;
 
-      expect(error).toEqual({ errorMessage: "User not found!" });
+      expect(error).toEqual({ errorMessage: "User not found." });
     });
 
     it("should validate if the data was updated", async () => {
@@ -152,6 +152,7 @@ describe("User resources", () => {
     it("should validate invalid E-mail scenario", async () => {
       const { body: user } = await request.get(`${URL}/${tenantId}`);
       user.email = "test";
+      delete user.password
 
       const response = await request
         .put(`${URL}/${tenantId}`)

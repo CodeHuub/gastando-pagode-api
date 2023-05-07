@@ -54,6 +54,7 @@
         "@db": "src/db",
         "@routes": "src/api/routes",
         "@controllers": "src/api/controllers",
+        "@utils": "src/utils",
         "@api": "src/api",
         "@root": "src"
     }

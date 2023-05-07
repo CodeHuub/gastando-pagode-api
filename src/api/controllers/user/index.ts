@@ -1,11 +1,13 @@
 import * as service from '@services/userServices'
 import { CreateUserDTO, FilterUserDTO, UpdateUserDTO } from "./dto/user.dto"
 import { IUser } from './interfaces/user.interface'
-import * as mapper from "./mapper"
+import * as userController from "@controllers/user"
 
 import { EMAIL_EMPTY, EMAIL_INVALID, IUserError, NAME_EMPTY, PASSWORD_EMPTY, TENANT_ID_EMPTY, USER_NOT_FOUND } from "./interfaces/userError.interface"
 import * as emailValidator from 'email-validator'
 import bcrypt from 'bcrypt'
+import userMapper from './mapper'
+import httpStatus from 'http-status'
 
 export const create = async (payload: CreateUserDTO): Promise<IUser | IUserError> => {
 
@@ -20,7 +22,7 @@ export const create = async (payload: CreateUserDTO): Promise<IUser | IUserError
     payload.tenantId = crypto.randomUUID();
     payload.password = await generatePassword(payload.password)
 
-    return mapper.toUser(await service.create(payload))
+    return userMapper.toUser(await service.create(payload))
 }
 export const update = async (tenantId: string, payload: UpdateUserDTO): Promise<IUser | IUserError> => {
 
@@ -28,35 +30,38 @@ export const update = async (tenantId: string, payload: UpdateUserDTO): Promise<
     // TODO - Criptografar a senha
     // TODO - Verificar se não é a mesma senha
 
-
+    const user = await getById(tenantId)
+    if (userController.isIUserError(user)) {
+        return user
+    }
     const userValidation = validateUser(payload)
     if (userValidation) {
         return userValidation;
     }
-    return mapper.toUser(await service.update(tenantId, payload))
+    return userMapper.toUser(await service.update(tenantId, payload))
 }
 export const getById = async (tenantId: string): Promise<IUser | IUserError> => {
 
     if (!tenantId) {
-        return mapper.toUserError(TENANT_ID_EMPTY)
+        return TENANT_ID_EMPTY
     }
 
     const user = await service.getById(tenantId)
     if (!user) {
-        return mapper.toUserError(USER_NOT_FOUND)
+        return USER_NOT_FOUND
     }
-    return mapper.toUser(user)
+    return userMapper.toUser(user)
 }
 export const deleteById = async (tenantId: string): Promise<Boolean | IUserError> => {
 
     if (!tenantId) {
-        return mapper.toUserError(TENANT_ID_EMPTY)
+        return TENANT_ID_EMPTY
     }
     const isDeleted = await service.deleteById(tenantId)
     return isDeleted
 }
 export const getAll = async (filters: FilterUserDTO): Promise<IUser[]> => {
-    return (await service.getAll(filters)).map(mapper.toUser)
+    return (await service.getAll(filters)).map(userMapper.toUser)
 }
 
 function generatePassword(password: string): Promise<string> {
@@ -78,18 +83,18 @@ function validatePassword(password: string, hashPassword: string): Promise<boole
 }
 
 function validateUser(payload: UpdateUserDTO): IUserError | null {
-    if (!payload.name) {
-        return mapper.toUserError(NAME_EMPTY)
-    } else if (!payload.email) {
-        return mapper.toUserError(EMAIL_EMPTY)
-    } else if (!payload.password) {
-        return mapper.toUserError(PASSWORD_EMPTY)
+    if (typeof payload.name === "string" && payload.name === '') {
+        return NAME_EMPTY
+    } else if (typeof payload.email === "string" && payload.email === '') {
+        return EMAIL_EMPTY
+    } else if (typeof payload.password === "string" && payload.password === '') {
+        return PASSWORD_EMPTY
     } else if (!emailValidator.validate(payload.email)) {
-        return mapper.toUserError(EMAIL_INVALID)
+        return EMAIL_INVALID
     }
     return null
 }
 
 export const isIUserError = (object: any): object is IUserError => {
-    return 'errorMessage' in object;
+    return 'errorMessage' in object && 'httpStatusCode' in object;
 }
